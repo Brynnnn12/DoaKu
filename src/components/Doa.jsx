@@ -1,28 +1,27 @@
-import { useEffect, useState, useMemo } from "react";
+import { useMemo } from "react";
 import API_URL from "../api/constants";
 import Loading from "./Loading";
 import { Link } from "react-router-dom";
+import { useCachedFetch } from "../hooks/useCachedFetch";
 
 export default function Doa() {
-  const [doaList, setDoaList] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { data: doaList, loading } = useCachedFetch(API_URL);
 
-  useEffect(() => {
-    fetch(API_URL)
-      .then((response) => response.json())
-      .then((data) => {
-        setDoaList(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  const limitedDoaList = useMemo(() => doaList.slice(0, 3), [doaList]);
+  const limitedDoaList = useMemo(
+    () => (doaList && Array.isArray(doaList) ? doaList.slice(0, 3) : []),
+    [doaList]
+  );
   if (loading) {
     return <Loading />;
+  }
+
+  if (!limitedDoaList.length) {
+    return (
+      <div className="text-center py-16">
+        <h2 className="text-4xl font-bold text-blue-800 mb-4">Tidak Ada Doa</h2>
+        <p className="text-gray-600">Silakan tambahkan doa baru.</p>
+      </div>
+    );
   }
 
   return (

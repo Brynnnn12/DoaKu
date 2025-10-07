@@ -1,29 +1,11 @@
-import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import API_URL from "../api/constants";
 import Loading from "./Loading";
+import { useCachedFetch } from "../hooks/useCachedFetch";
 
 export default function PrayerSearch() {
   const { doa } = useParams();
-  const [prayer, setPrayer] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(`${API_URL}/doa/${doa}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setPrayer(data[0]);
-        } else {
-          setPrayer(data);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, [doa]);
+  const { data: prayer, loading } = useCachedFetch(`${API_URL}/doa/${doa}`);
 
   if (loading) {
     return <Loading />;

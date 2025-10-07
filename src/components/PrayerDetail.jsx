@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import API_URL from "../api/constants";
 import Loading from "./Loading";
@@ -8,22 +8,25 @@ export default function PrayerDetail() {
   const [doa, setDoa] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch(`${API_URL}/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
-          setDoa(data[0]);
-        } else {
-          setDoa(data);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
+  const prayerDetail = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_URL}/${id}`);
+      const data = await response.json();
+      if (Array.isArray(data) && data.length > 0) {
+        setDoa(data[0]);
+      } else {
+        setDoa(data);
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
   }, [id]);
+
+  useEffect(() => {
+    prayerDetail();
+  }, [prayerDetail]);
 
   if (loading) {
     return <Loading />;
