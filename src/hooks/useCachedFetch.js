@@ -33,14 +33,12 @@ export function useCachedFetch(url) {
       })
       .catch((err) => {
         if (err.name === "AbortError") {
-          // Request was cancelled, don't set error
           return;
         }
         setError(err);
         setLoading(false);
       });
 
-    // Cleanup: abort request on unmount or URL change
     return () => {
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
@@ -48,15 +46,21 @@ export function useCachedFetch(url) {
     };
   }, [url]);
 
-  return { data, loading, error };
+  const invalidateCache = () => {
+    cache.delete(url);
+    // Trigger re-fetch by updating state or re-running effect
+    setData(null);
+    setLoading(true);
+    setError(null);
+  };
+
+  return { data, loading, error, invalidateCache };
 }
 
-// Function to invalidate cache for a specific URL
 export function invalidateCache(url) {
   cache.delete(url);
 }
 
-// Function to clear all cache
 export function clearCache() {
   cache.clear();
 }

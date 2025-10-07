@@ -1,12 +1,66 @@
-# React + Vite
+# DoaKu - Aplikasi Doa
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+DoaKu adalah aplikasi web untuk membaca dan mengelola doa-doa harian. Dibangun dengan React dan Vite untuk performa yang optimal.
 
-Currently, two official plugins are available:
+## Fitur
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Daftar doa dengan fitur load more
+- Detail doa dengan animasi
+- Caching API untuk performa yang lebih baik
+- Routing dengan lazy loading
+- Animasi menggunakan Framer Motion
+- Responsive design dengan Tailwind CSS
 
-## Expanding the ESLint configuration
+## Teknologi yang Digunakan
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React (dengan hooks seperti useMemo, useCallback, memo)
+- Vite (untuk build dan development)
+- React Router DOM (untuk routing)
+- Framer Motion (untuk animasi)
+- Tailwind CSS (untuk styling)
+- Custom hook useCachedFetch untuk caching API
+
+## Cara Menjalankan
+
+1. Install dependencies:
+
+   ```
+   npm install
+   ```
+
+2. Jalankan development server:
+
+   ```
+   npm run dev
+   ```
+
+3. Buka browser dan akses `http://localhost:5173`
+
+## Cara Refresh API
+
+Aplikasi menggunakan custom hook `useCachedFetch` untuk caching data API. Untuk refresh data API secara manual:
+
+- Gunakan fungsi `invalidateCache` yang tersedia di hook tersebut.
+- Contoh penggunaan di komponen:
+  ```javascript
+  const { data, loading, error, invalidateCache } = useCachedFetch(url);
+  // Panggil invalidateCache() untuk refresh data
+  ```
+
+Ini akan menghapus cache dan mengambil data terbaru dari API.
+
+## Struktur Proyek
+
+```
+src/
+  components/     # Komponen UI
+  hooks/          # Custom hooks seperti useCachedFetch
+  api/            # Konstanta API
+  assets/         # Gambar dan ikon
+  App.jsx         # Komponen utama
+  main.jsx        # Entry point
+```
+
+## Lisensi
+
+Proyek ini dibuat untuk tujuan pembelajaran.

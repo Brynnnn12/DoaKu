@@ -1,19 +1,10 @@
-import { useState, memo } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import API_URL from "../api/constants";
 import Loading from "./Loading";
 import { FaStar } from "react-icons/fa6";
 import { useCachedFetch } from "../hooks/useCachedFetch";
-
-const PrayerCard = memo(({ doa }) => (
-  <div className="bg-white p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 border-l-4 border-blue-500 cursor-pointer">
-    <div className="flex items-center mb-4">
-      <FaStar className="w-8 h-8 text-blue-500 mr-3" />
-      <h3 className="font-bold text-xl text-blue-800">{doa.doa}</h3>
-    </div>
-    <p className="text-gray-700 font-medium italic text-sm">{doa.ayat}</p>
-  </div>
-));
+import PrayerCard from "./PrayerCard";
 
 export default function PrayerList() {
   const { data: doaList, loading } = useCachedFetch(API_URL);
